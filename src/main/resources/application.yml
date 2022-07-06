@@ -4,15 +4,23 @@ server:
 spring:
   datasource:
     username: root
-    url: jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=UTF-8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+    url: jdbc:mysql://localhost:3306/test6?useUnicode=true&characterEncoding=UTF-8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
 
 keycloak:
+#  migration:
+#    action: import
+#    provider: dir
+#    strategy: OVERWRITE_EXISTING
+#    dir: /home/paris/projects/jhipster/tradingemulator/keycloak/src/main/resources/keycloak
+  profile:
+    feature:
+      upload_scripts: enabled
   server:
     contextPath: /auth
     adminUser:
       username: admin
-      password: pass
-    realmImportFile: realm-export.json
+      password: admin
+    realmImportFiles: realm-export.json
 #
 #eureka:
 #  instance:

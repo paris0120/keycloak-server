@@ -29,8 +29,8 @@ public class EmbeddedKeycloakApplication extends KeycloakApplication {
     @Override
     protected ExportImportManager bootstrap() {
         final ExportImportManager exportImportManager = super.bootstrap();
+        createRealms();
         createMasterRealmAdminUser();
-        createBaeldungRealm();
         return exportImportManager;
     }
 
@@ -49,20 +49,24 @@ public class EmbeddedKeycloakApplication extends KeycloakApplication {
         session.close();
     }
 
-    private void createBaeldungRealm() {
+    private void createRealms(){
         KeycloakSession session = getSessionFactory().create();
         try {
             session.getTransactionManager().begin();
             RealmManager manager = new RealmManager(session);
-            Resource lessonRealmImportFile = new ClassPathResource(
-                    keycloakServerProperties.getRealmImportFile());
-            manager.importRealm(JsonSerialization.readValue(lessonRealmImportFile.getInputStream(),
-                    RealmRepresentation.class));
-            session.getTransactionManager().commit();
+            for(String realm: keycloakServerProperties.getRealmImportFiles()) {
+                LOG.info("Create realm " + realm);
+                Resource lessonRealmImportFile = new ClassPathResource(realm);
+                manager.importRealm(JsonSerialization.readValue(lessonRealmImportFile.getInputStream(),
+                        RealmRepresentation.class));
+                session.getTransactionManager().commit();
+            }
         } catch (Exception ex) {
             LOG.warn("Failed to import Realm json file: {}", ex.getMessage());
             session.getTransactionManager().rollback();
         }
         session.close();
     }
+
+
 }

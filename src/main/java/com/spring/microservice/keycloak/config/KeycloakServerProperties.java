@@ -9,7 +9,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @Getter
 public class KeycloakServerProperties {
     String contextPath = "/auth";
-    String realmImportFile = "baeldung-realm.json";
+    //String realmImportFile = "jhipster-realm-export.json";
+    String[] realmImportFiles = {"jhipster-realm-export.json", "master-realm-export.json"};
     AdminUser adminUser = new AdminUser();
 
     // getters and setters
